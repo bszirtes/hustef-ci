@@ -20,10 +20,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python "${{ github.event.inputs.python_version }}"
+      - name: Set up Python ${{ github.event.inputs.python_version }}
         uses: actions/setup-python@v3
         with:
-          python-version: "${{ github.event.inputs.python_version }}"
+          python-version: ${{ github.event.inputs.python_version }}
 
       - name: Run Tests
         run: |
@@ -48,3 +48,15 @@ jobs:
             results.xml
             report.html
             assets
+
+      - name: Notify Slack - Build Status
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || 'danger' }}
+          SLACK_MESSAGE: |
+            ${{ job.status == 'success' && '✅ Python Tests completed successfully' || '❌ Python Tests failed' }}
+            on branch *${{ github.ref_name }}* by *${{ github.actor }}*.
+            Details: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View on GitHub>
+          SLACK_TITLE: "Build Status: ${{ job.status }}"
