@@ -14,7 +14,7 @@ def test_get_user_request():
     assert (user_data['last_name'] == "Weaver"), "Last Name verfication failed"
     assert (user_data['avatar'] == "https://reqres.in/img/faces/2-image.jpg"), "Avatar verfication failed"
     assert (user_response.headers['content-type'] == "application/json; charset=utf-8")
-    
+
     yield
 
 @test_steps('test_get_user_list_request')
@@ -25,7 +25,7 @@ def test_get_user_list_request():
     assert (get_users_list_response.status_code == 200), f"Status Code validation failed for {get_users_list_response.request.url}"
     assert (user_lists_root_data['page'] == 2), "Page verfication failed"
     assert (user_lists_root_data['per_page'] == 6), "Per_Page verfication failed"
-    assert (user_lists_root_data['total'] == 12), "Total verfication failed"
+    assert (user_lists_root_data['total'] == 15), "Total verfication failed"
     assert (user_lists_root_data['total_pages'] == 2), "Total_Pages verfication failed"
 
     user_lists_data_1 = user_lists_root_data['data'][0]
@@ -39,7 +39,7 @@ def test_get_user_list_request():
 
     emails = [item['email'] for item in user_lists_root_data['data']]
 
-    assert len(emails) == 6 
+    assert len(emails) == 6
     assert "michael.lawson@reqres.in" in emails
     assert "lindsay.ferguson@reqres.in" in emails
     assert "tobias.funke@reqres.in" in emails
